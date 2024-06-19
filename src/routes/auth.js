@@ -1,17 +1,24 @@
 const express = require('express');
+const { successResponse, errorResponse } = require('../../utils/responseHandler');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const authService = require('../services/authService');
 
-// Register route
 router.post('/register', async (req, res) => {
-  // registration logic here
+  try {
+    const { user, token } = await authService.register(req.body);
+    successResponse(res, { user, token },201);
+  } catch (err) {
+    errorResponse(res,err, err?.message || "Failed to register" ,400);
+  }
 });
 
-// Login route
 router.post('/login', async (req, res) => {
-  // login logic here
+  try {
+    const { user, token } = await authService.login(req.body);
+    res.json({ user, token });
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
 });
 
 module.exports = router;
