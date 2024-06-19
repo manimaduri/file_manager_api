@@ -5,11 +5,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   email: {
     type: String,
     required: true,
@@ -31,6 +26,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  folders: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Folder'
+  }],
   files: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'File'
