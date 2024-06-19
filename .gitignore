@@ -1,0 +1,20 @@
+#ignore node_modules and package-lock.json .env files and vs code settings
+
+#node_modules
+node_modules
+
+#package-lock.json
+package-lock.json
+
+#env files
+.env
+
+#vs code settings
+.vscode
+
+
+#ignore dist folder
+dist/
+
+#ignore logs folder
+logs/
