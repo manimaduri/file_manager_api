@@ -1,23 +1,36 @@
-const express = require('express');
-const { successResponse, errorResponse } = require('../../utils/responseHandler');
+const express = require("express");
+const {
+  successResponse,
+  errorResponse,
+} = require("../../utils/responseHandler");
 const router = express.Router();
-const authService = require('../services/authService');
+const authService = require("../services/authService");
 
-router.post('/register', async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const { user, token } = await authService.register(req.body);
-    successResponse(res, { user, token },201);
+    successResponse(res, { user, token }, 201);
   } catch (err) {
-    errorResponse(res,err, err?.message || "Failed to register" ,400);
+    errorResponse(
+      res,
+      err,
+      err?.message || "Failed to register",
+      err?.statusCode || 500
+    );
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { user, token } = await authService.login(req.body);
-    res.json({ user, token });
+    successResponse(res, { user, token }, 200);
   } catch (err) {
-    res.status(400).json({ msg: err.message });
+    errorResponse(
+      res,
+      err,
+      err?.message || "Failed to login",
+      err?.statusCode || 500
+    );
   }
 });
 

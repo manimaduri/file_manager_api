@@ -2,12 +2,13 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { ErrorHandler } = require('../../utils/responseHandler');
 
 exports.register = async (userData) => {
   let user = await User.findOne({ email: userData.email });
 
   if (user) {
-    throw new Error('User already exists');
+    throw new ErrorHandler('User already exists', 400);
   }
 
   user = new User(userData);
@@ -25,20 +26,29 @@ exports.register = async (userData) => {
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 
-  return { user, token };
+  // Exclude unnecessary data
+  const userResponse = {
+    id: user._id,
+    name: user.name,
+    profilePic: user.profilePic,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+
+  return { user: userResponse, token };
 };
 
 exports.login = async (userData) => {
   let user = await User.findOne({ email: userData.email });
 
   if (!user) {
-    throw new Error('Invalid Credentials');
+    throw new ErrorHandler('Invalid Credentials', 401);
   }
 
   const isMatch = await bcrypt.compare(userData.password, user.password);
 
   if (!isMatch) {
-    throw new Error('Invalid Credentials');
+    throw new ErrorHandler('Invalid Credentials', 401);
   }
 
   const payload = {
@@ -49,5 +59,14 @@ exports.login = async (userData) => {
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 
-  return { user, token };
+   // Exclude unnecessary data
+   const userResponse = {
+    id: user._id,
+    name: user.name,
+    profilePic: user.profilePic,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+
+  return { user : userResponse, token };
 };

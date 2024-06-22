@@ -1,7 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const authRoutes = require('./routes/auth');
-const authMiddleware = require('./middleware/auth');
+const router = require('./routes');
 
 const app = express();
 
@@ -21,7 +20,7 @@ const app = express();
 app.use(express.json({ extended: false }));
 
 // Define Routes
-app.use('/api/auth', authMiddleware, authRoutes);
+app.use('/', router);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
