@@ -14,6 +14,7 @@ const FolderSchema = new mongoose.Schema({
   parentFolder: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Folder',
+    required: false,
   },
   files: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -28,6 +29,9 @@ const FolderSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Add a compound index to ensure name is unique within the same parentFolder
+FolderSchema.index({ name: 1, parentFolder: 1 }, { unique: true });
 
 const Folder = mongoose.model('folder', FolderSchema);
 module.exports = Folder;

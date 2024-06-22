@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const router = require('./routes');
+const { errorResponse } = require('../utils/responseHandler');
 
 const app = express();
 
@@ -24,8 +25,8 @@ app.use('/', router);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  console.error("error middleware...",err.stack);
+  errorResponse(res, err, err?.message || 'Server Error', err?.statusCode || 500);
 });
 
 const PORT = process.env.PORT || 5000;

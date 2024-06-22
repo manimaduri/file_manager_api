@@ -6,7 +6,7 @@ exports.successResponse = function(res, data, statusCode = 200) {
 }
 
 exports.errorResponse = function(res, error, message, statusCode = 500) {
-  console.error(error);
+  console.error("errorResponse...",error);
   return res.status(statusCode).json({
     success: false,
     message,
