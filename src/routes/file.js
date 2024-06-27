@@ -1,13 +1,13 @@
 const express = require("express");
 const { successResponse, errorResponse } = require("../../utils/responseHandler");
 const fileService = require("../services/fileService");
-const uploadToS3Middleware = require("../middleware/uploadFileToS3");
+const {uploadToS3Middleware} = require("../middleware/uploadFileToS3");
 const router = express.Router();
 
 
 
 // Create a new file
-router.post("/",uploadToS3Middleware, async (req, res) => {
+router.post("/",...uploadToS3Middleware, async (req, res) => {
   try {
     const fileData = {
       name: req.body.name,
